@@ -10,21 +10,56 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false">
 </script>
 <script type="text/javascript">
-  function initialize() {
+  function initMap() {
     var latlng = new google.maps.LatLng(37.39822, -121.9643936);
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    addMarker(35.857908, 10.598997);
+    var myLatLng = {lat: -25.363, lng: 131.044};
     var myOptions = {
       zoom: 14,
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl: false,
-      navigationControl: false,
-      streetViewControl: false,
+      mapTypeControl: true,
+      navigationControl: true,
+      streetViewControl: true,
       backgroundColor: "#666970"
-    };
+    }
     
+    
+document.goToLocation = function(x, y) {
+    alert("goToLocation, x: " + x + ", y:" + y);
+    var latLng = new google.maps.LatLng(x, y);
+    map.setCenter(latLng);
+    // Since you have multiple markers, markers will remain as they are
+}
+
+function addMarker(x, y) {
+    var marker = new google.maps.Marker({
+       position : new google.maps.LatLng(x, y),
+       map : map,
+       draggable : false,
+       title : "Hazards",
+       autoPan : true
+    });
+    
+    google.maps.event.addListener(marker, 'mouseover', function() {
+       infobulle.open(map, marker);
+    });
+}
+
     document.geocoder = new google.maps.Geocoder();
     document.map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
-    
+   
+   
+   document.marker = function addMarker(x,y) {
+       var marker = new google.maps.Marker({
+       position : new google.maps.LatLng(x, y),
+       map : map,
+       draggable : true,
+       title : "Hazards",
+       autoPan : true
+   });
+   }
     document.zoomIn = function zoomIn() {
     	var zoomLevel = document.map.getZoom();
     	if (zoomLevel <= 20) document.map.setZoom(zoomLevel + 1);
@@ -59,8 +94,11 @@
     }
   }
 </script>
+<script defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHB8jBfe7S4csbBP99PyNF42hAmVBibaI&callback=initMap">
+</script>
 </head>
-<body onload="initialize()">
+<body onload="initMap()">
   <div id="map_canvas" style="width:100%; height:100%"></div>
 </body>
 </html>
