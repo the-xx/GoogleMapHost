@@ -16,7 +16,7 @@
     addMarker(35.857908, 10.598997);
     var myLatLng = {lat: -25.363, lng: 131.044};
     var myOptions = {
-      zoom: 14,
+      zoom: 0,
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: true,
@@ -34,7 +34,7 @@ document.goToLocation = function(x, y) {
 }
 
 function addMarker(x, y) {
-    var marker = new google.maps.Marker({
+       var marker = new google.maps.Marker({
        position : new google.maps.LatLng(x, y),
        map : map,
        draggable : false,
@@ -46,20 +46,18 @@ function addMarker(x, y) {
        infobulle.open(map, marker);
     });
 }
-
-    document.geocoder = new google.maps.Geocoder();
-    document.map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
-   
-   
-   document.marker = function addMarker(x,y) {
-       var marker = new google.maps.Marker({
+var marker = new google.map.Marker({
        position : new google.maps.LatLng(x, y),
        map : map,
        draggable : true,
        title : "Hazards",
        autoPan : true
-   });
-   }
+       });
+    document.geocoder = new google.maps.Geocoder();
+    document.map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
+    
+   
+   
     document.zoomIn = function zoomIn() {
     	var zoomLevel = document.map.getZoom();
     	if (zoomLevel <= 20) document.map.setZoom(zoomLevel + 1);
@@ -87,7 +85,8 @@ function addMarker(x, y) {
         document.geocoder.geocode( {'address': searchString}, function(results, status) {        
       	  if (status == google.maps.GeocoderStatus.OK) {
             document.map.setCenter(results[0].geometry.location);
-          } else {
+          } 
+          else {
             alert("Geocode was not successful for the following reason: " + status);
           }
         }); 
