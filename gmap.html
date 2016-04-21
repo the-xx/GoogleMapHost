@@ -17,7 +17,7 @@ async defer></script>
     var myLatLng = {lat: 37.39822, lng: -121.9643936};
     var marker = new google.maps.Marker({
       position: myLatLng,
-      map: map,
+      map: document.map,
       title: 'Hello World!'
     });
   }
@@ -34,7 +34,7 @@ async defer></script>
     };
     
     document.geocoder = new google.maps.Geocoder();
-    document.map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
+    document.map = new google.maps.Map(document.getElementById("map_canvas"));
     
     document.zoomIn = function zoomIn() {
     	var zoomLevel = document.map.getZoom();
