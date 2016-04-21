@@ -1,70 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<style type="text/css">
-  html { height: 100% }
-  body { height: 100%; margin: 0px; padding: 0px }
-  #map_canvas { height: 100%; background-color: #666970; }
-</style>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
 
-</head>
+      function initMap() {
+        var myLatLng ={lat: 37.39822, lng: -121.9643936};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: myLatLng
+        });
+      }
 
-<body >
-  <div id="map_canvas" style="width:100%; height:100%"></div>
-</body>
-<script type="text/javascript">
-  function test(){
-    alert("I am an alert box!");
-    var myLatLng = {lat: 37.39822, lng: -121.9643936};
-    var marker = new google.maps.Marker({
-      position: myLatLng,
-      map: map,
-      title: 'Hello World!'
-    });
-  }
-  function initialize() {
-    var map = new google.maps.Map(document.getElementById("map_canvas"));
-    var geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(37.39822, -121.9643936);
-    var myOptions = {
-      zoom: 14,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl: false,
-      navigationControl: false,
-      streetViewControl: false,
-      backgroundColor: "#666970"
-    };
-    
-    
-
-
-    function setMapTypeRoad() {
-    	map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-    }
-    function setMapTypeSatellite() {
-    	map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
-    }
-    function setMapTypeHybrid() {
-    	map.setMapTypeId(google.maps.MapTypeId.HYBRID);
-    }
-    function setMapTypeTerrain() {
-    	map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
-    }
-    
-    function goToLocation(searchString) {
-        geocoder.geocode( {'address': searchString}, function(results, status) {        
-      	  if (status == google.maps.GeocoderStatus.OK) {
-            map.setCenter(results[0].geometry.location);
-          } else {
-            alert("Geocode was not successful for the following reason: " + status);
-          }
-        }); 
-    }
-  }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDp9prS3sS0V0iljEjmwsOWfZOTDgw6w3U&callback=initialize"
-async defer></script>
-
+      function test(){
+        alert("I am an alert box!");
+        var myLatLng = {lat: 37.39822, lng: -121.9643936};
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Hello World!'
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDp9prS3sS0V0iljEjmwsOWfZOTDgw6w3U&callback=initMap">
+    </script>
+  </body>
 </html>
