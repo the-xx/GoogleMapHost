@@ -3,6 +3,9 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="papaparse.min.js"></script>
+    
     <title>Simple markers</title>
     <style>
       html, body {
@@ -13,12 +16,18 @@
       #map {
         height: 100%;
       }
+
     </style>
   </head>
   <body>
+    <input type="file" id="files" multiple="">
     <div id="map"></div>
     <script>
     var map;
+    var input;
+    var output;
+    var route = [];
+    var carPath;
 
       function initMap() {
         var myLatLng ={lat: 37.39822, lng: -121.9643936};
@@ -26,6 +35,13 @@
           zoom: 4,
           center: myLatLng
         });
+        carPath = new google.maps.Polyline({
+          path: [{lat:0.0, lng:0.0},{lat:0.0, lng:0.0}],
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        })
       }
 
       function test(){
@@ -38,9 +54,113 @@
         });
         marker.setMap(map);
       }
+
+      /*function plot(route){
+        var carPath = new google.maps.Polyline({
+          path: route,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+        carPath.setMap(map);
+
+      }*/
+
+      function upload(){
+         document.getElementById("files").click();
+      }
+      function now()
+      {
+        return typeof window.performance !== 'undefined'
+            ? window.performance.now()
+            : 0;
+      }
+      function completeFn(results)
+      {
+        end = now();
+
+        if (results && results.errors)
+        {
+          if (results.errors)
+          {
+            errorCount = results.errors.length;
+            firstError = results.errors[0];
+          }
+          if (results.data && results.data.length > 0)
+            rowCount = results.data.length;
+        }
+        console.log("    Results:", results);
+        output =  results.data;
+
+        for (var i = 0; i < output.length; i++) {
+          route.push({lat: Number(output[i][1]), lng: Number(output[i][2])});
+        }
+        carPath = new google.maps.Polyline({
+          path: route,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+        carPath.setMap(map);
+      }
+
+      function buildConfig()
+      {
+        return {
+          delimiter: "",  // auto-detect
+          newline: "",  // auto-detect
+          header: false,
+          dynamicTyping: false,
+          preview: 0,
+          encoding: "",
+          worker: false,
+          comments: false,
+          step: undefined,
+          complete: completeFn,
+          error: undefined,
+          download: false,
+          skipEmptyLines: false,
+          chunk: undefined,
+          fastMode: undefined,
+          beforeFirstChunk: undefined,
+          withCredentials: undefined
+        };
+      }
+
+      $("#files").change(function () {
+        if ($("#files").val() == "") {
+          return;
+        }
+        carPath.setMap(null);
+        var config = buildConfig();
+        input = $('#files');
+        input = $('#files').parse({
+          config: config,
+          before: function(file, inputElem)
+          {
+            start = now();
+            console.log("Parsing file...", file);
+          },
+          error: function(err, file)
+          {
+            console.log("ERROR:", err, file);
+            firstError = firstError || err;
+            errorCount++;
+          },
+          complete: function()
+          {
+            end = now();
+          }
+        })
+
+      });
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDp9prS3sS0V0iljEjmwsOWfZOTDgw6w3U&callback=initMap">
     </script>
+
+
   </body>
 </html>
